@@ -1,17 +1,9 @@
 fun main() {
     fun part1(input: List<List<String>>): Int {
-        var maxCalories = 0;
-
-        for (group in input) {
-            maxCalories = maxOf(maxCalories, group.sumOf { it.toInt() })
-        }
-
-        return maxCalories;
+        return input.maxOf { it.sumOf { str -> str.toInt() } }
     }
 
     fun part2(input: List<List<String>>): Int {
-        // can sort whole list at the end and take top3
-        // dunno which way is faster
         val topGnomesNumber = 3;
 
         val topGnomes = IntArray(topGnomesNumber);
@@ -21,8 +13,7 @@ fun main() {
 
             topGnomes.forEachIndexed { index, value ->
                 if (value < currentGnomeCalories) {
-                    topGnomes[index] = currentGnomeCalories;
-                    currentGnomeCalories = value;
+                    topGnomes[index] = currentGnomeCalories.also { currentGnomeCalories = topGnomes[index] }
                 }
             }
         }
