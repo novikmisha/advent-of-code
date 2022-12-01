@@ -4,9 +4,9 @@ fun main() {
     }
 
     fun part2(input: List<List<String>>): Int {
-        val topGnomesNumber = 3;
+        val topGnomesNumber = 3
 
-        val topGnomes = IntArray(topGnomesNumber);
+        val topGnomes = IntArray(topGnomesNumber)
 
         for (group in input) {
             var currentGnomeCalories = group.sumOf { it.toInt() }
@@ -18,7 +18,7 @@ fun main() {
             }
         }
 
-        return topGnomes.sum();
+        return topGnomes.sum()
     }
 
     // test if implementation meets criteria from the description, like:
