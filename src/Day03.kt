@@ -1,16 +1,8 @@
 fun main() {
 
     fun findCommonChar(strings: List<String>): Collection<Char> {
-        val chars = mutableMapOf<Char, Int>()
-        strings.forEach {
-            val charSet = it.toSet()
-            charSet.forEach { char ->
-                chars[char] = chars.computeIfAbsent(char) { 0 }.inc()
-
-            }
-        }
-        return chars.filterValues { it == strings.size }
-            .keys
+        return strings.map { it.toSet() }
+            .reduce(Set<Char>::intersect)
     }
 
     fun part1(input: List<String>): Int {
