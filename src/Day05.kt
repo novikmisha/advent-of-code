@@ -1,10 +1,9 @@
 fun main() {
 
-    fun  processCargo(input: List<List<String>>, itemSort: (items: List<String>) -> List<String>): String {
-        val cargo = input[0]
-        val commands = input[1]
+    fun processCargo(input: List<List<String>>, itemSort: (items: List<String>) -> List<String>): String {
+        val (cargo, commands) = input
 
-        val numberOfColumns = cargo[cargo.size - 1].split(" ")
+        val numberOfColumns = cargo.last().split(" ")
             .filter(String::isNotEmpty)
             .maxOf { it.toInt() }
 
@@ -21,20 +20,17 @@ fun main() {
         }
 
         for (command in commands) {
-            val splittedCommand = command
+            command
                 .split(" ")
                 .mapNotNull(String::toIntOrNull)
-
-            val itemCount = splittedCommand[0]
-            val from = splittedCommand[1]
-            val to = splittedCommand[2]
-
-            val lastItems = stacks[from - 1].takeLast(itemCount)
-            repeat(itemCount) { stacks[from - 1].removeLast() }
-            stacks[to - 1].addAll(itemSort(lastItems))
+                .let { (itemCount, from, to) ->
+                    val lastItems = stacks[from - 1].takeLast(itemCount)
+                    repeat(itemCount) { stacks[from - 1].removeLast() }
+                    stacks[to - 1].addAll(itemSort(lastItems))
+                }
         }
 
-        return stacks.joinToString(separator = "") { it.last() }
+        return stacks.joinToString("") { it.last() }
     }
 
     fun part1(input: List<List<String>>): String {
