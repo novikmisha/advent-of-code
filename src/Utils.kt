@@ -8,6 +8,9 @@ import java.security.MessageDigest
 fun readInput(name: String) = File("src", "$name.txt")
     .readLines()
 
+fun readInputAsLine(name: String) = File("src", "$name.txt")
+    .readText()
+
 fun readGroupedInput(name: String): List<List<String>> {
     val lines = File("src", "$name.txt")
         .readLines()
