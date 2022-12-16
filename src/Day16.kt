@@ -56,11 +56,11 @@ fun main() {
         valveMap: Map<String, WaterNode>, stepsLeft: Int,
         currentNode: String,
         flowRate: Int,
-        results: MutableSet<Int>,
-        toVisit: Set<String>
+        results: MutableSet<Pair<Int, Set<String>>>,
+        toVisit: MutableSet<String>
     ) {
         if (stepsLeft < 1) {
-            results.add(flowRate)
+            results.add(Pair(flowRate, toVisit))
             return
         }
 
@@ -74,20 +74,19 @@ fun main() {
             currentFlowRate += releasedPressure
         }
 
+        toVisit.remove(node.name)
+        if (toVisit.isEmpty()) {
+            results.add(Pair(currentFlowRate, toVisit))
+            return
+        }
+
         if (currentSteps < 1) {
-            results.add(currentFlowRate)
+            results.add(Pair(currentFlowRate, toVisit))
             return
         }
 
-        val newToVisit = toVisit.toMutableSet()
-        newToVisit.remove(node.name)
-        if (newToVisit.isEmpty()) {
-            results.add(currentFlowRate)
-            return
-        }
-
-        val distanceMap = findDistances(valveMap, currentNode, newToVisit)
-        for (nextNode in newToVisit) {
+        val distanceMap = findDistances(valveMap, currentNode, toVisit)
+        for (nextNode in toVisit) {
 
             val distance = distanceMap[nextNode]!!
             if (distance >= currentSteps + 1) {
@@ -100,24 +99,50 @@ fun main() {
                 nextNode,
                 currentFlowRate,
                 results,
-                newToVisit,
+                toVisit.toMutableSet()
             )
         }
+
     }
 
 
     fun part1(input: List<String>): Int {
         val valveMap = buildValveMap(input)
 
-        val results = mutableSetOf<Int>()
+        val results = mutableSetOf<Pair<Int, Set<String>>>()
 
-        val toVisit = valveMap.filter { it.value.flowRate > 0 }.keys
+        val toVisit = valveMap.filter { it.value.flowRate > 0 }.keys.toMutableSet()
         dfs(valveMap, 30, "AA", 0, results, toVisit)
-        return results.max()
+        return results.maxBy { it.first }.first
     }
 
     fun part2(input: List<String>): Int {
-        return 0
+        val valveMap = buildValveMap(input)
+
+        var results = mutableSetOf<Pair<Int, Set<String>>>()
+
+        val toVisit = valveMap.filter { it.value.flowRate > 0 }.keys.toMutableSet()
+        dfs(valveMap, 26, "AA", 0, results, toVisit)
+
+        val resultList = results.toList()
+        var maxSize = 0
+        for (i in 0 until resultList.size - 1) {
+            for (j in i + 1 until resultList.size) {
+                val sum = resultList[i].first + resultList[j].first
+                if (sum > maxSize) {
+                    val visitedHuman = toVisit.toMutableSet()
+                    visitedHuman.removeAll(resultList[i].second)
+
+                    val visitedElephans = toVisit.toMutableSet()
+                    visitedElephans.removeAll(resultList[j].second)
+
+                    if (visitedHuman.intersect(visitedElephans).isEmpty()) {
+                        maxSize = sum
+                    }
+                }
+            }
+        }
+        return maxSize
     }
 
 
