@@ -134,7 +134,7 @@ fun main() {
         val findingCycleGas = mutableListOf<Int>()
         for (step in 0L until cycles) {
             val figure = getFigure(step, map.size)
-            var connectedToTower = false
+            var connectedToTower: Boolean
             do {
                 when (input[gasNumber]) {
                     '>' -> moveFigureRight(figure, map)
@@ -154,7 +154,6 @@ fun main() {
 
             val nextStep = step + 1
             if (nextStep % figureMap.size.toLong() == 0L) {
-                println("$gasNumber = ${map.size - 1}")
 
                 cycleToMapSize.add(map.size - 1)
                 if (findingCycleGas.count { it == gasNumber } >= 2) {
@@ -166,37 +165,11 @@ fun main() {
                     val possibleCycle = findingCycleGas.takeLast(cycleLength)
                     val prevCycle = findingCycleGas.toList().dropLast(cycleLength).takeLast(cycleLength)
 
-                    if (possibleCycle == prevCycle) {
+                    if (possibleCycle == prevCycle && (1000000000000 - step - 1) % cycleLength == 0L) {
 
                         val cycleMapSizeEnd = cycleToMapSize[cycleToMapSize.size - 1]
                         val cycleMapSizeStart = cycleToMapSize[cycleToMapSize.size - cycleLength - 1]
-                        val almostResult = (1000000000000 - step - 1) / cycleLength / figureMap.size * (cycleMapSizeEnd - cycleMapSizeStart) + cycleMapSizeEnd
-
-                        map = mutableListOf<MutableList<Boolean>>()
-                        map.add(MutableList(7) { true })
-
-                        for (i in 0..(1000000000000 - step - 1) % cycleLength) {
-                            val figure = getFigure(step, map.size)
-                            var connectedToTower = false
-                            do {
-                                when (input[gasNumber]) {
-                                    '>' -> moveFigureRight(figure, map)
-                                    '<' -> moveFigureLeft(figure, map)
-                                }
-                                gasNumber = (gasNumber + 1) % input.length
-
-                                val nextFigure = figure.map { it.copy() }
-                                moveFigureDown(nextFigure)
-                                connectedToTower = connectedToTower(map, nextFigure)
-                                if (!connectedToTower) {
-                                    moveFigureDown(figure)
-                                }
-                            } while (!connectedToTower)
-
-                            addFigureToMap(map, figure)
-                        }
-
-                        return almostResult + map.size - 1
+                        return (1000000000000 - step - 1) / cycleLength / figureMap.size * (cycleMapSizeEnd - cycleMapSizeStart) + cycleMapSizeEnd
                     }
 
                 }
@@ -210,9 +183,9 @@ fun main() {
 
 
 //     test if implementation meets criteria from the description, like:
-//    val testInput = readInputAsLine("Day17_test")
-//    println(part1(testInput))
-//    println(part2(testInput))
+    val testInput = readInputAsLine("Day17_test")
+    println(part1(testInput))
+    println(part2(testInput))
 
     val input = readInputAsLine("Day17")
     println(part1(input))
