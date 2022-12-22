@@ -113,8 +113,8 @@ fun main() {
         //        eeeeffff
         //        eeeeffff
 
+        val teleports = mutableMapOf<Pair<Char, Pair<Int, Int>>, Pair<Char, Pair<Int, Int>>>()
         if (test) {
-            val teleports = mutableMapOf<Pair<Char, Pair<Int, Int>>, Pair<Char, Pair<Int, Int>>>()
             teleports[Pair('a', right)] = Pair('f', left)
             teleports[Pair('a', top)] = Pair('b', bottom)
             teleports[Pair('a', left)] = Pair('c', bottom)
@@ -135,10 +135,29 @@ fun main() {
             teleports[Pair('f', right)] = Pair('a', left)
             teleports[Pair('f', bottom)] = Pair('b', right)
 
-            return teleports
+        } else {
+            teleports[Pair('a', left)] = Pair('d', right)
+            teleports[Pair('a', top)] = Pair('f', right)
+
+            teleports[Pair('b', top)] = Pair('f', top)
+            teleports[Pair('b', right)] = Pair('e', left)
+            teleports[Pair('b', bottom)] = Pair('c', left)
+
+            teleports[Pair('c', left)] = Pair('d', bottom)
+            teleports[Pair('c', right)] = Pair('b', top)
+
+            teleports[Pair('d', left)] = Pair('a', right)
+            teleports[Pair('d', top)] = Pair('c', right)
+
+            teleports[Pair('e', right)] = Pair('b', left)
+            teleports[Pair('e', bottom)] = Pair('f', left)
+
+            teleports[Pair('f', right)] = Pair('e', top)
+            teleports[Pair('f', left)] = Pair('a', bottom)
+            teleports[Pair('f', bottom)] = Pair('b', bottom)
         }
 
-        return mutableMapOf()
+        return teleports
     }
 
     fun getZone(zones: Map<Char, Pair<Int, Int>>, position: Pair<Int, Int>, step: Int): Char {
