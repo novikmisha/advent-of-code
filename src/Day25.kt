@@ -26,7 +26,14 @@ fun main() {
         while (workingNumber != 0L) {
             val mod = (workingNumber).mod(5)
             result += snafuNumbers[mod]
-            workingNumber = (workingNumber + 2) / 5
+
+            val carriedBase = when(mod) {
+                3 -> 2
+                4 -> 1
+                else -> 0
+            }
+
+            workingNumber = (workingNumber + carriedBase) / 5
         }
 
         return result.reversed()
