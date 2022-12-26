@@ -4,21 +4,10 @@ fun main() {
     }
 
     fun part2(input: List<List<String>>): Int {
-        val topGnomesNumber = 3
-
-        val topGnomes = IntArray(topGnomesNumber)
-
-        for (group in input) {
-            var currentGnomeCalories = group.sumOf { it.toInt() }
-
-            topGnomes.forEachIndexed { index, value ->
-                if (value < currentGnomeCalories) {
-                    topGnomes[index] = currentGnomeCalories.also { currentGnomeCalories = topGnomes[index] }
-                }
-            }
-        }
-
-        return topGnomes.sum()
+        return input.map { it.sumOf { str -> str.toInt() } }
+            .sortedDescending()
+            .take(3)
+            .sum()
     }
 
     // test if implementation meets criteria from the description, like:
