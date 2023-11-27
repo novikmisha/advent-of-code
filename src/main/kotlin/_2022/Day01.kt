@@ -1,3 +1,7 @@
+package _2022
+
+import readGroupedInput
+
 fun main() {
     fun part1(input: List<List<String>>): Int {
         return input.maxOf { it.sumOf { str -> str.toInt() } }

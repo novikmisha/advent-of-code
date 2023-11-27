@@ -1,3 +1,7 @@
+package _2022
+
+import readInput
+
 fun main() {
 
     fun findDistances(

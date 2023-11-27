@@ -1,9 +1,12 @@
+package _2022
+
+import readInput
 import java.math.BigInteger
 import kotlin.math.abs
 
 fun main() {
 
-    fun printMap(map: Map<Pair<Int, Int>, BeaconItem>) {
+    fun printMap(map: Map<Pair<Int, Int>, _2022.BeaconItem>) {
         val minX = map.keys.minBy { it.first }.first - 1
         val maxX = map.keys.maxBy { it.first }.first + 1
         val minY = 0
@@ -11,7 +14,7 @@ fun main() {
 
         for (y in minY..maxY) {
             for (x in minX..maxX) {
-                print(map.getOrDefault(Pair(x, y), BeaconItem.AIR).mapChar)
+                print(map.getOrDefault(Pair(x, y), _2022.BeaconItem.AIR).mapChar)
             }
 
             println()
@@ -38,7 +41,7 @@ fun main() {
         abs(firstCord.first - secondCord.first) + abs(firstCord.second - secondCord.second)
 
     fun part1(input: List<String>, yRow: Int): Int {
-        val beaconMap = mutableMapOf<Pair<Int, Int>, BeaconItem>()
+        val beaconMap = mutableMapOf<Pair<Int, Int>, _2022.BeaconItem>()
         val scannedMap = mutableMapOf<Pair<Int, Int>, Int>()
         val sensors = mutableMapOf<Pair<Int, Int>, Int>()
         input.forEach {
@@ -48,8 +51,8 @@ fun main() {
             val distance = getDistance(sensorCoord, beaconCoord)
             sensors[sensorCoord] = distance
 
-            beaconMap[sensorCoord] = BeaconItem.SENSOR
-            beaconMap[beaconCoord] = BeaconItem.BEACON
+            beaconMap[sensorCoord] = _2022.BeaconItem.SENSOR
+            beaconMap[beaconCoord] = _2022.BeaconItem.BEACON
         }
         val minBy = sensors.minBy { it.key.first - it.value }
         val minX = minBy.key.first - minBy.value
@@ -59,7 +62,7 @@ fun main() {
         var counter = 0
         for (i in minX..maxX) {
             val coord = Pair(i, yRow)
-            if (beaconMap.getOrDefault(coord, BeaconItem.AIR) == BeaconItem.BEACON) {
+            if (beaconMap.getOrDefault(coord, _2022.BeaconItem.AIR) == _2022.BeaconItem.BEACON) {
                 continue
             }
             val closeSensors = sensors.any {
@@ -77,7 +80,7 @@ fun main() {
     }
 
     fun part2(input: List<String>, maxCoord: Int): BigInteger? {
-        val beaconMap = mutableMapOf<Pair<Int, Int>, BeaconItem>()
+        val beaconMap = mutableMapOf<Pair<Int, Int>, _2022.BeaconItem>()
         val scannedMap = mutableMapOf<Pair<Int, Int>, Int>()
         val sensors = mutableMapOf<Pair<Int, Int>, Int>()
         input.forEach {
@@ -87,8 +90,8 @@ fun main() {
             val distance = getDistance(sensorCoord, beaconCoord)
             sensors[sensorCoord] = distance
 
-            beaconMap[sensorCoord] = BeaconItem.SENSOR
-            beaconMap[beaconCoord] = BeaconItem.BEACON
+            beaconMap[sensorCoord] = _2022.BeaconItem.SENSOR
+            beaconMap[beaconCoord] = _2022.BeaconItem.BEACON
         }
 
         val maxX = maxCoord
@@ -131,7 +134,7 @@ fun main() {
                 }
 
             for (coord in pointsToCheck) {
-                if (beaconMap.getOrDefault(coord, BeaconItem.AIR) == BeaconItem.BEACON) {
+                if (beaconMap.getOrDefault(coord, _2022.BeaconItem.AIR) == _2022.BeaconItem.BEACON) {
                     continue
                 }
                 val closeSensors = sensors.all {

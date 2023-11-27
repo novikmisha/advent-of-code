@@ -1,3 +1,7 @@
+package _2022
+
+import readGroupedInput
+
 fun main() {
 
     fun processCargo(input: List<List<String>>, itemSort: (items: List<String>) -> List<String>): String {

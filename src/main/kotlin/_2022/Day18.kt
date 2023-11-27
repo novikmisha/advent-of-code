@@ -1,3 +1,7 @@
+package _2022
+
+import readInput
+
 fun main() {
     fun getNearCoords(coord: Triple<Int, Int, Int>): Set<Triple<Int, Int, Int>> {
         return setOf(

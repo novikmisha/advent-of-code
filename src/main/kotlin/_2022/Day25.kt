@@ -1,3 +1,6 @@
+package _2022
+
+import readInput
 import kotlin.math.pow
 
 fun main() {

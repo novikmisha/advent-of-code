@@ -1,21 +1,22 @@
-import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
+import kotlin.io.path.readText
 
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = File("src", "$name.txt")
+fun readInput(name: String) = Path("src/$name.txt")
     .readLines()
 
-fun readInputAsLine(name: String) = File("src", "$name.txt")
+fun readInputAsLine(name: String) = Path("src/$name.txt")
     .readText()
 
 fun readGroupedInput(name: String): List<List<String>> {
-    val lines = File("src", "$name.txt")
-        .readLines()
+    val lines = readInput(name)
 
-    val groupedLines = mutableListOf<List<String>>();
+    val groupedLines = mutableListOf<List<String>>()
     var currentGroup = mutableListOf<String>()
 
     for (line in lines) {

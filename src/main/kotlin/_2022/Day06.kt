@@ -1,3 +1,7 @@
+package _2022
+
+import readInputAsLine
+
 fun main() {
 
     fun findPlaceOfNDistinctChars(input: String, n: Int): Int {

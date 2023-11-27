@@ -1,3 +1,7 @@
+package _2022
+
+import readInput
+
 fun main() {
     fun part1(input: List<String>): Int {
         var node = Node(Node.dir, 0, "/", null, mutableListOf())

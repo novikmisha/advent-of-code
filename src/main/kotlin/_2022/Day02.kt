@@ -1,3 +1,7 @@
+package _2022
+
+import readInput
+
 // seen more elegant solutions via myFigure - "X" - maps into number
 // and you win when your figure = opponent's figure +1 (mod 3 ofc)
 fun main() {

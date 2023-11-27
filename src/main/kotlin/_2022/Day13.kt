@@ -1,3 +1,6 @@
+package _2022
+
+import readGroupedInput
 import kotlin.math.max
 
 fun main() {

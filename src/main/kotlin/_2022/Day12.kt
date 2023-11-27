@@ -1,3 +1,7 @@
+package _2022
+
+import readInput
+
 fun main() {
     fun getChar(input: List<String>, vertex: Pair<Int, Int>): Char {
         var first = input[vertex.first][vertex.second]
