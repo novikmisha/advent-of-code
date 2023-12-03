@@ -12,99 +12,53 @@ class Day03 : Day(2023, 3) {
     override val firstTestAnswer = 4361
     override val secondTestAnswer = 467835
 
+    private val numRegex = Regex("\\d+")
+
     override fun first(input: InputReader): Int {
-        val map = input.asLines()
+        val schematic = input.asLines()
 
-        val result = mutableListOf<Int>()
+        return schematic.flatMapIndexed { x, line ->
 
-        map.forEachIndexed { x, line ->
-            var start = 0
-            line.forEachIndexed { y, char ->
-                if (!char.isDigit()) {
-                    line.substring(start, y).toIntOrNull()?.let { number ->
-                        val coordinatesOfNumber = (start until y).map { position ->
-                            Coordinate(x, position)
-                        }
+            numRegex.findAll(line).mapNotNull { matchResult ->
+                val number = matchResult.value.toInt()
 
-                        getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
-                            map.atCoordinates(coordinate)?.let {
-                                if (!it.isDigit() && it != '.') {
-                                    result.add(number)
-                                    return@let
-                                }
-                            }
-                        }
-                    }
-                    start = y + 1
+                val coordinatesOfNumber = (matchResult.range.first..matchResult.range.last).map { position ->
+                    Coordinate(x, position)
                 }
-            }
-            val y = line.length
 
-            if (start < y) {
-                line.substring(start, y).toIntOrNull()?.let { number ->
-                    val coordinatesOfNumber = (start until y).map { position ->
-                        Coordinate(x, position)
-                    }
-
-                    getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
-                        map.atCoordinates(coordinate)?.let {
-                            if (!it.isDigit() && it != '.') {
-                                result.add(number)
-                                return@let
-                            }
+                getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
+                    schematic.atCoordinates(coordinate)?.let {
+                        if (!it.isDigit() && it != '.') {
+                            return@mapNotNull number
                         }
                     }
                 }
-            }
-        }
 
-        return result.sum()
+                return@mapNotNull null
+            }
+
+        }.sum()
     }
 
     override fun second(input: InputReader): Int {
-        val map = input.asLines()
+        val schematic = input.asLines()
 
         val result = mutableMapOf<Coordinate, MutableList<Int>>()
+        val numRegex = Regex("\\d+")
 
-        map.forEachIndexed { x, line ->
-            var start = 0
-            line.forEachIndexed { y, char ->
-                if (!char.isDigit()) {
-                    line.substring(start, y).toIntOrNull()?.let { number ->
-                        val coordinatesOfNumber = (start until y).map { position ->
-                            Coordinate(x, position)
-                        }
+        schematic.forEachIndexed { x, line ->
+            numRegex.findAll(line).forEach { matchResult ->
 
-                        getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
-                            map.atCoordinates(coordinate)?.let {
-                                if (it == '*') {
-                                    result.getOrPut(coordinate) {
-                                        mutableListOf()
-                                    }.add(number)
-                                    return@let
-                                }
-                            }
-                        }
-                    }
-                    start = y + 1
+                val number = matchResult.value.toInt()
+
+                val coordinatesOfNumber = (matchResult.range.first..matchResult.range.last).map { position ->
+                    Coordinate(x, position)
                 }
-            }
-            val y = line.length
 
-            if (start < y) {
-                line.substring(start, y).toIntOrNull()?.let { number ->
-                    val coordinatesOfNumber = (start until y).map { position ->
-                        Coordinate(x, position)
-                    }
-
-                    getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
-                        map.atCoordinates(coordinate)?.let {
-                            if (it == '*') {
-                                result.getOrPut(coordinate) {
-                                    mutableListOf()
-                                }.add(number)
-                                return@let
-                            }
+                getCoordinatesAround(coordinatesOfNumber).forEach { coordinate ->
+                    schematic.atCoordinates(coordinate)?.let {
+                        if (it == '*') {
+                            result.getOrPut(coordinate) { mutableListOf() }.add(number)
                         }
                     }
                 }
