@@ -5,8 +5,8 @@ abstract class Day(
     private val day: Int
 ) {
 
-    val testInput = InputReader(year, day, true)
-    val input = InputReader(year, day, false)
+    protected val testInput = InputReader(year, day, true)
+    protected val input = InputReader(year, day, false)
 
     abstract val firstTestAnswer: Any
     abstract val secondTestAnswer: Any

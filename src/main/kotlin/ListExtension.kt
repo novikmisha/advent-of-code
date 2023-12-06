@@ -7,6 +7,7 @@ inline fun <T> Collection<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int?
 }
 
 fun Collection<Int>.times() = reduce(Int::times)
+fun Collection<Long>.times() = reduce(Long::times)
 
 fun List<String>.atCoordinates(coordinate: Coordinate): Char? {
     if (!indices.contains(coordinate.x)
