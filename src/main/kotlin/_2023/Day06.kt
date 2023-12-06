@@ -43,7 +43,6 @@ class Day06 : Day(2023, 6) {
             leastHoldTime++
         } while (leastHoldTime * (time - leastHoldTime) <= distance)
 
-        println(leastHoldTime)
         return time - (leastHoldTime.times(2uL)) + 1uL
     }
 
