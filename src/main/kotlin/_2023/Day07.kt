@@ -58,35 +58,14 @@ class Day07 : Day(2023, 7) {
     override val firstTestAnswer = 6440
     override val secondTestAnswer = 5905
 
-    override fun first(input: InputReader): Int {
-        fun getHandPower(hand: String): HandPower {
-            val cardOccurrences = getCardOccurrences(hand)
-            return HandPower.entries.firstOrNull { it.validation(cardOccurrences) } ?: error("$hand has no power")
-        }
-
-        val handPowersMap = mutableMapOf<String, HandPower>()
-        val cards = listOf(
-            'A',
-            'K',
-            'Q',
-            'J',
-            'T',
-            '9',
-            '8',
-            '7',
-            '6',
-            '5',
-            '4',
-            '3',
-            '2',
-        )
+    private fun solve(input: InputReader, cards: List<Char>, getHandPower: (hand: String) -> HandPower): Int {
 
         val games = input.asLines().map { line ->
             val (hand, bid) = line.split(" ")
             Game(hand, bid.toInt())
         }
 
-        games.forEach { game -> handPowersMap[game.hand] = getHandPower(game.hand) }
+        val handPowersMap = games.associate { game -> game.hand to getHandPower(game.hand) }
 
         val gameComparator = Comparator<Game> { firstGame, secondGame ->
             val firstHandPower = handPowersMap[firstGame.hand]!!
@@ -107,8 +86,31 @@ class Day07 : Day(2023, 7) {
         }
 
         return games.sortedWith(gameComparator).mapIndexed { index, game ->
-            (index+1) * game.bid
+            (index + 1) * game.bid
         }.sum()
+    }
+
+    override fun first(input: InputReader): Int {
+        val cards = listOf(
+            'A',
+            'K',
+            'Q',
+            'J',
+            'T',
+            '9',
+            '8',
+            '7',
+            '6',
+            '5',
+            '4',
+            '3',
+            '2',
+        )
+
+        return solve(input, cards) { hand ->
+            val cardOccurrences = getCardOccurrences(hand)
+            HandPower.entries.firstOrNull { it.validation(cardOccurrences) } ?: error("$hand has no power")
+        }
     }
 
     override fun second(input: InputReader): Int {
@@ -140,38 +142,8 @@ class Day07 : Day(2023, 7) {
             }
         }
 
-        val handPowersMap = mutableMapOf<String, HandPower>()
-
-        val games = input.asLines().map { line ->
-            val (hand, bid) = line.split(" ")
-            Game(hand, bid.toInt())
-        }
-
-        games.forEach { game -> handPowersMap[game.hand] = getHandPower(game.hand) }
-
-        val gameComparator = Comparator<Game> { firstGame, secondGame ->
-            val firstHandPower = handPowersMap[firstGame.hand]!!
-            val secondHandPower = handPowersMap[secondGame.hand]!!
-
-            if (firstHandPower != secondHandPower) {
-                firstHandPower.power - secondHandPower.power
-            } else {
-                for (i in 0 until 5) {
-                    val firstGameCharIndex = cards.indexOf(firstGame.hand[i])
-                    val secondGameCharIndex = cards.indexOf(secondGame.hand[i])
-                    if (firstGameCharIndex != secondGameCharIndex) {
-                        return@Comparator secondGameCharIndex - firstGameCharIndex
-                    }
-                }
-                error("can't get here")
-            }
-        }
-
-        return games.sortedWith(gameComparator).mapIndexed { index, game ->
-            (index+1) * game.bid
-        }.sum()
+        return solve(input, cards, ::getHandPower)
     }
-
 }
 
 fun main() {
