@@ -52,3 +52,23 @@ fun getCoordinatesAround(coordinates: List<Coordinate>) =
 
         it.removeAll(coordinates.toSet())
     }
+
+
+fun gcd(first: Long, second: Long): Long {
+    var a = first
+    var b = second
+
+    while (b != 0L) {
+        a = b.also {
+            b = a.mod(b)
+        }
+    }
+
+    return a
+}
+
+
+fun lcm(first: Long, second: Long): Long {
+    return first * second / gcd(first, second);
+}
+
