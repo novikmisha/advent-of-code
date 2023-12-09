@@ -12,7 +12,6 @@ class Day03 : Day(2023, 3) {
     override val firstTestAnswer = 4361
     override val secondTestAnswer = 467835
 
-    private val numRegex = Regex("\\d+")
 
     override fun first(input: InputReader): Int {
         val schematic = input.asLines()
@@ -44,7 +43,6 @@ class Day03 : Day(2023, 3) {
         val schematic = input.asLines()
 
         val result = mutableMapOf<Coordinate, MutableList<Int>>()
-        val numRegex = Regex("\\d+")
 
         schematic.forEachIndexed { x, line ->
             numRegex.findAll(line).forEach { matchResult ->

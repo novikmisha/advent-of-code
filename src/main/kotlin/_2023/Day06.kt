@@ -9,7 +9,6 @@ class Day06 : Day(2023, 6) {
     override val firstTestAnswer = 288L
     override val secondTestAnswer = 71503uL
 
-    private val numRegex = Regex("\\d+")
 
     override fun first(input: InputReader): Long {
         val (times, distances) = input.asLines().map {

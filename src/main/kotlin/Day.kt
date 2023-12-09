@@ -11,6 +11,8 @@ abstract class Day(
     abstract val firstTestAnswer: Any
     abstract val secondTestAnswer: Any
 
+    protected val numRegex = Regex("-?\\d+")
+
     abstract fun first(input: InputReader): Any
     abstract fun second(input: InputReader): Any
 

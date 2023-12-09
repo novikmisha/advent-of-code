@@ -14,7 +14,6 @@ class Day05 : Day(2023, 5) {
     override val firstTestAnswer: Long = 35L
     override val secondTestAnswer = 46L
 
-    private val numRegex = Regex("\\d+")
 
     override fun first(input: InputReader): Long {
         val almanac = input.asGroups().toMutableList()
