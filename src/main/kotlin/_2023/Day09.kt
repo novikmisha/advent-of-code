@@ -13,7 +13,7 @@ class Day09 : Day(2023, 9) {
         input.asLines().sumOf { line ->
             val rows = mutableListOf(numRegex.findAll(line).map { it.value.toLong() }.toList())
             while (!rows.last().all { it == 0L }) {
-                rows.add(rows.last().zipWithNext().map { it.second - it.first })
+                rows.add(rows.last().zipWithNext { first, second -> second - first })
             }
 
             rows.map { it.last() }.reversed().reduce { result, currentElement -> currentElement + result }
@@ -23,7 +23,7 @@ class Day09 : Day(2023, 9) {
         input.asLines().sumOf { line ->
             val rows = mutableListOf(numRegex.findAll(line).map { it.value.toLong() }.toList())
             while (!rows.last().all { it == 0L }) {
-                rows.add(rows.last().zipWithNext().map { it.second - it.first })
+                rows.add(rows.last().zipWithNext { first, second -> second - first })
             }
 
             rows.map { it.first() }.reversed().reduce { result, currentElement -> currentElement - result }
