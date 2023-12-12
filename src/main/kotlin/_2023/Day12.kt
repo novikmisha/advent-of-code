@@ -5,71 +5,100 @@ import InputReader
 
 class Day12 : Day(2023, 12) {
 
+    data class Hash(
+        val schema: String,
+        val groups: String
+    )
 
-    override val firstTestAnswer = 21
-    override val secondTestAnswer = 0
+    override val firstTestAnswer = 21L
+    override val secondTestAnswer = 525152L
 
     private fun solve(
         schema: String,
-        numberOfSprings: Int,
-        passed: MutableSet<String>,
-        visited: MutableSet<String>,
         neededGroups: List<Int>
-    ) {
-        if (!visited.add(schema)) {
-            return
+    ) = solve(schema, neededGroups, mutableMapOf())
+
+    private fun process(schema: String, neededGroups: List<Int>, hash: MutableMap<Hash, Long>): Long {
+        if (neededGroups.isEmpty()) {
+            return 0L
         }
 
-        if (numberOfSprings == 0) {
-            val groups = schema.replace("?", ".").split(".").filter { it.isNotEmpty() }
-
-            if (groups.size != neededGroups.size) {
-                return
-            }
-
-            if (groups.map { it.length }.zip(neededGroups).all { it.first == it.second }) {
-                passed.add(schema)
-            }
-
-        } else {
-            val replacePositions = schema.mapIndexedNotNull { index, char -> if (char == '?') index else null }
-            for (replacePosition in replacePositions) {
-                val newSchema = StringBuilder(schema).also { it.setCharAt(replacePosition, '#') }.toString()
-                solve(newSchema, numberOfSprings - 1, passed, visited, neededGroups)
+        val currentGroup = neededGroups.first()
+        if (schema.length < currentGroup) {
+            return 0L
+        }
+        for (i in 1 until currentGroup) {
+            if (schema[i] == '.') {
+                return 0L
             }
         }
+
+        if (currentGroup == schema.length) {
+            if (neededGroups.size == 1) {
+                return 1L
+            }
+            return 0L
+        }
+
+        if (schema[currentGroup] == '#') {
+            return 0L
+        }
+
+        return solve(schema.drop(currentGroup + 1), neededGroups.drop(1), hash)
     }
+
+    private fun solve(schema: String, neededGroups: List<Int>, hash: MutableMap<Hash, Long>): Long =
+        hash.getOrPut(Hash(schema, neededGroups.joinToString { "," })) {
+            if (schema.isEmpty()) {
+                return@getOrPut if (neededGroups.isEmpty()) {
+                    1L
+                } else {
+                    0L
+                }
+            }
+
+            when (schema.first()) {
+                '.' -> {
+                    solve(schema.drop(1), neededGroups, hash)
+                }
+
+                '#' -> {
+                    process(schema, neededGroups, hash)
+                }
+
+                '?' -> {
+                    solve(schema.drop(1), neededGroups, hash) + process(schema, neededGroups, hash)
+                }
+
+                else -> {
+                    error("")
+                }
+            }
+        }
 
     override fun first(input: InputReader) = input.asLines().sumOf { line ->
         val (unparsedGroups, unparsedNeededGroups) = line.split(" ")
         val neededGroups = unparsedNeededGroups.trim().split(",").map { it.trim().toInt() }
         val schema = unparsedGroups.split(".").filter { it.isNotEmpty() }.joinToString(separator = ".")
 
-        val visited = mutableSetOf<String>()
-        val passed = mutableSetOf<String>()
-        val numberOfSprings = neededGroups.sum() - schema.count { it == '#' }
-        solve(schema, numberOfSprings, passed, visited, neededGroups)
-
-        passed.size
+        solve(schema, neededGroups)
     }
+
 
     override fun second(input: InputReader) = input.asLines().sumOf { line ->
         val (unparsedGroups, unparsedNeededGroups) = line.split(" ")
-        val neededGroups = ("${unparsedNeededGroups.trim()},").repeat(5).dropLast(1).split(",").map { it.trim().toInt() }
-        val schema = ("${unparsedGroups.trim()}?").repeat(5).dropLast(1).split(".").filter { it.isNotEmpty() }.joinToString(separator = ".")
-        println(neededGroups)
-        println(schema)
 
-        val visited = mutableSetOf<String>()
-        val passed = mutableSetOf<String>()
-        val numberOfSprings = neededGroups.sum() - schema.count { it == '#' }
-        solve(schema, numberOfSprings, passed, visited, neededGroups)
+        val neededGroups =
+            ("${unparsedNeededGroups.trim()},").repeat(5).trim().split(",").filter { it.isNotEmpty() }
+                .map { it.trim().toInt() }
 
-        println("done")
-        passed.size
+        val schema = ("${unparsedGroups.trim()}?").repeat(5).dropLast(1).split(".").filter { it.isNotEmpty() }
+            .joinToString(separator = ".")
+
+        solve(schema, neededGroups)
     }
 }
 
 fun main() {
-    Day12().solve(skipFirst = true)
+    Day12().solve()
 }
