@@ -17,3 +17,13 @@ fun List<String>.atCoordinates(coordinate: Coordinate): Char? {
 
     return get(coordinate.x)[coordinate.y]
 }
+
+@JvmName("atCoordinateChar")
+fun List<CharArray>.atCoordinates(coordinate: Coordinate): Char? {
+    if (!indices.contains(coordinate.x)
+        || !(0 until first().size).contains(coordinate.y)) {
+        return null
+    }
+
+    return get(coordinate.x)[coordinate.y]
+}
