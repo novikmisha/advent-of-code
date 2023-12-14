@@ -53,7 +53,7 @@ class Day14 : Day(2023, 14) {
             }
         }
 
-        val cycleHistories = mutableListOf<List<Rock>>()
+        val cycleHistories = mutableListOf<Set<Rock>>()
         var cycle = 0
         do {
             directions.forEach { direction ->
@@ -79,8 +79,8 @@ class Day14 : Day(2023, 14) {
             }
 
 
-            val currentRocks = rocks.map { it.copy() }
-            val cycleStart = cycleHistories.indexOfFirst { it.containsAll(currentRocks) }
+            val currentRocks = rocks.mapTo(mutableSetOf()) { it.copy() }
+            val cycleStart = cycleHistories.indexOf(currentRocks)
 
             if (cycleStart >= 0) {
                 val endIndex = (1000000000 - cycleStart + 1) % (cycle - cycleStart) - 1
