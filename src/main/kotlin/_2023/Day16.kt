@@ -114,8 +114,8 @@ class Day16 : Day(2023, 16) {
             startingBeams.addAll(getBeamsFromCoordinate(secondCoordinate, TOP, schema))
         }
 
-        return startingBeams.maxOf { beam ->
-            var beams = listOf(beam)
+        return startingBeams.maxOf { startingBeam ->
+            var beams = listOf(startingBeam)
             val visited = mutableSetOf<Beam>().apply { addAll(beams) }
 
             while (beams.isNotEmpty()) {
